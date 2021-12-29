@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.mapper.StudentDao">
+
+	<!-- 获取学生总数 -->
+	<select id="getStudentListCount" resultType="Integer">
+		select count(*) from student where 1=1
+		<if test="student.point_add !=null and student.point_add!=-1">
+			and point_add = #{student.point_add}
+		</if>
+		<if test="student.name != null and student.name!=''">
+			and name like CONCAT('%',#{student.name},'%')
+		</if>
+		<if test="student.gender !=null and student.gender!=''">
+			and gender like CONCAT('%',#{student.gender},'%')
+		</if>
+		<if test="student.student_id !=null and student.student_id!=''">
+			and student_id like CONCAT('%',#{student.student_id},'%')
+		</if>
+		<if test="student.card_id !=null and student.card_id!=''">
+			and card_id like CONCAT('%',#{student.card_id},'%')
+		</if>
+	</select>
+
+	<!-- 获取学生列表 -->
+	<select id="getStudentList" resultType="com.work.entity.Student">
+		select * from student f
+		where 1=1
+		<if test="student.point_add !=null and student.point_add!=-1">
+			and point_add = #{student.point_add}
+		</if>
+		<if test="student.name != null and student.name!=''">
+			and name like CONCAT('%',#{student.name},'%')
+		</if>
+		<if test="student.gender !=null and student.gender!=''">
+			and gender like CONCAT('%',#{student.gender},'%')
+		</if>
+		<if test="student.student_id !=null and student.student_id!=''">
+			and student_id like CONCAT('%',#{student.student_id},'%')
+		</if>
+		<if test="student.card_id !=null and student.card_id!=''">
+			and card_id like CONCAT('%',#{student.card_id},'%')
+		</if>
+		order by f.id
+		<if test="page != null and limit != null">
+			limit #{page},#{limit}
+		</if>
+	</select>
+
+	<!-- 根据考生号student_id获取学生信息 -->
+	<select id="getStudentByStudent_id"
+		resultType="com.work.entity.Student">
+		select * from student where student_id = #{student_id}
+	</select>
+
+	<!-- 更新学生信息 -->
+	<update id="updateStudent"
+		parameterType="com.work.entity.Student">
+		update student
+		<trim prefix="set" suffixOverrides=",">
+			<if test="student.note != null">note = #{student.note},</if>
+			<if test="student.point_add !=-1">point_add = #{student.point_add},</if>
+		</trim>
+		where student_id = #{student.student_id}
+	</update>
+
+	<!-- 通过考生号删除学生 -->
+	<delete id="deleteStudentByStudent_id"
+		parameterType="java.lang.String">
+		delete from student where student_id = #{student_id}
+	</delete>
+
+	<!-- 增加学生 -->
+	<update id="addStudent" parameterType="com.work.entity.Student">
+		insert into
+		student(id,name,gender,student_id,card_id,point_add,city,county,note)
+		values(#{student.id},#{student.name},#{student.gender},#{student.student_id},
+		#{student.card_id},#{student.point_add},#{student.city},#{student.county},
+		#{student.note})
+	</update>
+
+	<!-- 根据省市/县区查询学生数量 -->
+	<select id="getStudentListCounterByCityOrCounty"
+		resultType="Integer">
+		select count(*) from student where 1=1
+		<if test="city!=null">
+			and city = #{city}
+		</if>
+		<if test="county!=null">
+			and county = #{county}
+		</if>
+	</select>
+
+	<!-- 统计县区数 -->
+	<select id="countCounty" resultType="Integer">
+		select count(distinct county) from student
+	</select>
+
+
+
+
+
+
+
+
+
+
+</mapper>

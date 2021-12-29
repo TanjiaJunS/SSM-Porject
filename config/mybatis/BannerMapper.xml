@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.mapper.BannerDao">
+
+	<!-- 获取轮播图的总数 -->
+	<select id="getBannerListCount"
+		parameterType="com.work.entity.Banner" resultType="Integer">
+		select count(*) from banner where 1=1
+		<if test="banner.id != null and banner.id != -1">
+			and id = #{banner.id}
+		</if>
+		<if test="banner.title !=null and banner.title!=''">
+			and title like CONCAT('%',#{banner.title},'%')
+		</if>
+	</select>
+
+	<!-- 获取轮播图列表 -->
+	<select id="getBannerList" resultType="com.work.entity.Banner">
+		select * from banner b where 1=1
+		<if test="banner.id != null and banner.id != -1">
+			and id = #{banner.id}
+		</if>
+		<if test="banner.title !=null and banner.title!=''">
+			and title like CONCAT('%',#{banner.title},'%')
+		</if>
+		order by b.orderStatus asc
+		<if test="page != null and limit != null">
+			limit #{page},#{limit}
+		</if>
+	</select>
+
+	<!-- 通过id获取轮播图对象 -->
+	<select id="getBannerById" parameterType="Integer"
+		resultType="com.work.entity.Banner">
+		select * from banner where id = #{id}
+	</select>
+
+	<!-- 编辑轮播 -->
+	<update id="updateBanner" parameterType="com.work.entity.Banner">
+		update banner
+		<trim prefix="set" suffixOverrides=",">
+			<if test="banner.title !=null">title = #{banner.title},</if>
+			<if test="banner.image !=null">image = #{banner.image},</if>
+			<if test="banner.orderStatus !=null">orderStatus = #{banner.orderStatus},</if>
+		</trim>
+		where id = #{banner.id}
+	</update>
+
+	<!-- 删除轮播 -->
+	<delete id="deleteBanner" parameterType="com.work.entity.Banner">
+		delete from banner where
+		id = #{banner.id}
+	</delete>
+
+	<update id="addBanner" parameterType="com.work.entity.Banner">
+		insert into
+		banner(id,title,image,orderStatus,create_time)
+		values(#{banner.id},#{banner.title},#{banner.image},#{banner.orderStatus},#{banner.create_time})
+	</update>
+
+	<!-- 获取轮播图列表 -->
+	<select id="getBannerList1" resultType="com.work.entity.Banner">
+		select * from banner
+	</select>
+
+
+
+
+
+
+
+
+
+</mapper>

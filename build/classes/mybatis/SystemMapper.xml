@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.mapper.SystemDao">
+	<!-- 获取系统信息 -->
+	<select id="getSystemInfo"
+		resultType="com.work.entity.SystemInfo">
+		select * from systemInfo
+	</select>
+
+	<update id="updateSysInfo"
+		parameterType="com.work.entity.SystemInfo">
+		update systemInfo
+		<trim prefix="set" suffixOverrides=",">
+			<if test="systemInfo.systemName !=null">systemName = #{systemInfo.systemName},</if>
+			<if test="systemInfo.addres !=null">addres = #{systemInfo.addres},</if>
+			<if test="systemInfo.phone !=null">phone = #{systemInfo.phone},</if>
+			<if test="systemInfo.systemLogo !=null">systemLogo = #{systemInfo.systemLogo},</if>
+			<if test="systemInfo.time !=null">time = #{systemInfo.time},</if>
+		</trim>
+		where id = #{systemInfo.id}
+	</update>
+</mapper>

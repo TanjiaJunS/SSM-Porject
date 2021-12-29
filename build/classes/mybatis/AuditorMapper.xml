@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.mapper.AuditorDao">
+
+	<select id="getUserById" resultType="com.work.entity.Auditor">
+		select * from auditor where user_id = #{user_id}
+	</select>
+
+	<update id="updateUser" parameterType="com.work.entity.Auditor">
+		update auditor set password = #{user.password} where user_id =
+		#{user.user_id}
+	</update>
+
+	<!-- 获取审核人员总数 -->
+	<select id="getAuditorListCount" resultType="Integer">
+		select count(*) from auditor where 1=1
+		<if test="auditor.level !=null and auditor.level!=-1">
+			and level = #{auditor.level}
+		</if>
+		<if test="auditor.user_id != null and auditor.user_id!=''">
+			and user_id like CONCAT('%',#{auditor.user_id},'%')
+		</if>
+		<if test="auditor.userName !=null and auditor.userName!=''">
+			and userName like CONCAT('%',#{auditor.userName},'%')
+		</if>
+		<if test="auditor.area !=null and auditor.area!=''">
+			and area like CONCAT('%',#{auditor.area},'%')
+		</if>
+	</select>
+
+	<!-- 获取审核人员列表 -->
+	<select id="getAuditorList" resultType="com.work.entity.Auditor">
+		select * from auditor f
+		where 1=1
+		<if test="auditor.level !=null and auditor.level!=-1">
+			and level = #{auditor.level}
+		</if>
+		<if test="auditor.user_id != null and auditor.user_id!=''">
+			and user_id like CONCAT('%',#{auditor.user_id},'%')
+		</if>
+		<if test="auditor.userName !=null and auditor.userName!=''">
+			and userName like CONCAT('%',#{auditor.userName},'%')
+		</if>
+		<if test="auditor.area !=null and auditor.area!=''">
+			and area like CONCAT('%',#{auditor.area},'%')
+		</if>
+		order by f.user_id
+		<if test="page != null and limit != null">
+			limit #{page},#{limit}
+		</if>
+	</select>
+
+	<!-- 编辑更新审核人员信息 -->
+	<update id="updateAuditor"
+		parameterType="com.work.entity.Auditor">
+		update auditor set userName = #{auditor.userName},
+		<if test="auditor.level !=-1">level = #{auditor.level},</if>
+		area = #{auditor.area}
+		where user_id = #{auditor.user_id}
+	</update>
+
+	<!-- 删除审核人员账号 -->
+	<delete id="deleteAuditorByUser_id"
+		parameterType="java.lang.String">
+		delete from auditor where user_id = #{user_id}
+	</delete>
+
+	<!-- 新建审核账号 -->
+	<update id="addAuditor" parameterType="com.work.entity.Auditor">
+		insert into
+		auditor(user_id,password,userName,level,area)
+		values(#{auditor.user_id},#{auditor.password},#{auditor.userName},
+		#{auditor.level},#{auditor.area})
+	</update>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
