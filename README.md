@@ -1,2 +1,2 @@
 # SSM-Porject
-an easy java project
+an easy java web project
